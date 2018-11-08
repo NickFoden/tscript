@@ -1,3 +1,5 @@
+import { number } from 'prop-types';
+
 /**
  * Shuffle an array in place
  * @param a Array to shuffle
@@ -56,13 +58,20 @@ export class Dealer {
     shuffleArray(this.cards);
   }
 
-  dealHand(numCards: number): Card[] {}
+  dealHand(numCards: number): Card[] {
+    if (numCards > this.getLength()) throw new Error('Not enough cards left');
+    if (numCards < 0) throw new Error('Please give me your cards');
+    return this.cards.splice(this.getLength() - numCards, numCards);
+  }
 
   getLength(): number {
     return this.cards.length;
   }
-  readCard(card: Card): string {}
+  readCard(card: Card): string {
+    let [suit, cardNumber] = card;
+    return `${CardNumber[cardNumber]} of ${Suit[suit]}`;
+  }
 }
 
 let d = new Dealer();
-console.log(d.getLength());
+console.log(d.cards);
