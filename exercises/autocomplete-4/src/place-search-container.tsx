@@ -7,13 +7,13 @@ import { PlaceSearchResultList } from './place-search-result-list';
 
 interface IPlaceSearchContainerState {
   results: PlaceDetails[];
-  term: string,
+  term: string;
   existingSearch?: Promise<PlaceDetails[]>;
 }
 
 export class PlaceSearchContainer extends React.Component<{}, IPlaceSearchContainerState> {
   constructor() {
-    super();
+    super({});
     this.state = {
       term: '',
       results: [], // List of search results
@@ -30,8 +30,7 @@ export class PlaceSearchContainer extends React.Component<{}, IPlaceSearchContai
    * @memberof PlaceSearch
    * @return {undefined}
    */
-  beginSearch(term: string) {
-    
+  async beginSearch(term: string) {
     // Kick off the new search, with the new search term
     let p = autocomplete(term);
     // Update the existingSearch state, so our component re-renders
@@ -39,7 +38,7 @@ export class PlaceSearchContainer extends React.Component<{}, IPlaceSearchContai
     this.setState({ term, existingSearch: p, results: [] });
     // Attach a promise handler to the search.
     //  THIS WILL ONLY BE INVOKED IF THE SEARCH RUNS TO COMPLETION
-    p.then((results) => {
+    p.then(results => {
       // When the search completes, update the "results" state, triggering a re-render
       this.setState({ results, existingSearch: undefined });
     });
@@ -60,7 +59,8 @@ export class PlaceSearchContainer extends React.Component<{}, IPlaceSearchContai
         results={this.state.results}
         inProgress={!!this.state.existingSearch && this.state.results.length === 0}
         term={this.state.term}
-        onSearchTermChanged={s => this.beginSearch(s)} />
+        onSearchTermChanged={(s: any) => this.beginSearch(s)}
+      />
     );
   }
 }
